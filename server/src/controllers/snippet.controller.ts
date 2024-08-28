@@ -54,19 +54,24 @@ export const getSnippets = async (req: Request, res: Response) => {
 export const updateSnippet = async (req: Request, res: Response) => {
   try {
     const { snippetId } = req.params;
-    console.log(snippetId);
     const { title, code, folderId, isPublic } = req.body;
     const isPublicValue = isPublic === 'private' ? 'false' : 'true';
     const formattedCode = await formatCode(code);
 
-    const snippet = await Snippet.findByIdAndUpdate(snippetId, {
-      $set: {
-        title,
-        code: formattedCode,
-        folderId,
-        isPublic: isPublicValue,
+    await Snippet.findByIdAndUpdate(
+      snippetId,
+      {
+        $set: {
+          title,
+          code: formattedCode,
+          folderId,
+          isPublic: isPublicValue,
+        },
       },
-    });
+      {
+        new: true,
+      }
+    );
 
     res.status(201).json({ success: true, message: 'update successfull' });
   } catch (error) {

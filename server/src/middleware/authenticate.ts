@@ -7,7 +7,9 @@ export const isAuthenticateOrNot = async (
   next: NextFunction
 ) => {
   try {
-    const accessToken = req?.cookies?.auth_user_access_token;
+    const accessToken =
+      req?.cookies?.auth_user_access_token ||
+      req.headers.authorization.split('Bearer')[1].trim();
     if (!accessToken) {
       return res.status(401).json({
         success: false,

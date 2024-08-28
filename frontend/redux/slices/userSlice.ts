@@ -48,10 +48,10 @@ export const fetchUserDetails = (): any => {
       const data = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/auth/user`,
         {
-          credentials: "include",
+          // credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            cookie: Cookies.get("auth_user_access_token") || "",
+            Authorization: `Bearer ${localStorage.getItem("auth_user_access_token")}`,
           },
         }
       );
