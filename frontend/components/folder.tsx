@@ -47,7 +47,7 @@ const Folder: React.FC<IFolderProps> = ({
     if (newFolderName.trim() === "") return;
     try {
       const { data } = await axios.post(
-        "http://localhost:8055/api/v1/folder/create",
+        `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/folder/create`,
 
         {
           name: newFolderName,
@@ -71,12 +71,15 @@ const Folder: React.FC<IFolderProps> = ({
       return;
     }
     try {
-      await axios.post("http://localhost:8055/api/v1/code-snippet/create", {
-        title: newCodeSnippetTitle,
-        code: newCodeSnippetCode,
-        folderId: _id,
-        isPublic: codeSnippetPrivacyValue,
-      });
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/code-snippet/create`,
+        {
+          title: newCodeSnippetTitle,
+          code: newCodeSnippetCode,
+          folderId: _id,
+          isPublic: codeSnippetPrivacyValue,
+        }
+      );
       setNewCodeSnippetTitle("");
       setNewCodeSnippetCode("");
       setShowCodeSnippetInput(false);
@@ -90,7 +93,7 @@ const Folder: React.FC<IFolderProps> = ({
     if (confirm) {
       try {
         await axios.delete(
-          `http://localhost:8055/api/v1/folder/delete/${folderId}`,
+          `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/folder/delete/${folderId}`,
           {
             withCredentials: true,
           }

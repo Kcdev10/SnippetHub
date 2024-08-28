@@ -46,7 +46,7 @@ export default function SnippetCard({
     if (confirm) {
       try {
         await axios.delete(
-          `http://localhost:8055/api/v1/code-snippet/delete/${snippetId}`,
+          `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/code-snippet/delete/${snippetId}`,
           {
             withCredentials: true,
           }
@@ -65,7 +65,7 @@ export default function SnippetCard({
     }
     try {
       await axios.post(
-        `http://localhost:8055/api/v1/code-snippet/update/${snippetId}`,
+        `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/code-snippet/update/${snippetId}`,
         {
           title: newCodeSnippetTitle,
           code: newCodeSnippetCode,
