@@ -56,7 +56,6 @@ export const fetchUserDetails = (): any => {
         }
       );
       const user = await data.json();
-      console.log(user);
       if (user.status) {
         dispatch(setUserDetails(user.user));
         dispatch(setUserAuthOrNot(true));
