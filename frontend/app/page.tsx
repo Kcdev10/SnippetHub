@@ -15,7 +15,7 @@ const Home: React.FC = () => {
   return (
     <div className="relative min-h-screen flex flex-col">
       {/* Full-Screen Hero Section */}
-      <div className="relative bg-cover bg-center md:h-screen h-[40vh] flex items-center justify-center text-center text-white mt-14">
+      <div className="relative bg-cover bg-center md:h-screen h-[60vh] flex items-center justify-center text-center text-white mt-16">
         <div className="absolute w-full h-full left-0 top-0">
           <video
             className="w-full h-full object-cover "
@@ -27,11 +27,11 @@ const Home: React.FC = () => {
         </div>
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 md:max-w-4xl w-full mx-auto p-4 flex flex-col gap-8 items-center">
-          <h1 className="text-2xl font-bold md:text-5xl">
+          <h1 className="text-3xl font-bold md:text-5xl">
             Organize and Access Your Code Snippets Effortlessly
           </h1>
 
-          <p className="text-sm md:text-xl">
+          <p className="md:text-xl">
             Save, categorize, and quickly find your code snippets with our
             user-friendly platform. Perfect for developers who want to keep
             their code organized and accessible.

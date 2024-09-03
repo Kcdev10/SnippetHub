@@ -1,16 +1,13 @@
 "use client";
 // components/Folder.tsx
-import React, { useEffect, useState } from "react";
-import { FaFolderPlus, FaCode } from "react-icons/fa";
-import { IFolder } from "./folder-list";
-import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import { fetchFolder, selectFolder } from "@/redux/slices/folderSlice";
-import Cookies from "js-cookie";
-import path from "path";
-import { FaDeleteLeft } from "react-icons/fa6";
-import { RiChatDeleteLine } from "react-icons/ri";
-import { MdDelete, MdDeleteOutline } from "react-icons/md";
+import axios from "axios";
+import React, { useState } from "react";
+import { FaCode, FaFolderPlus } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
+import { IFolder } from "./folder-list";
+import { fetchCodeSnippet } from "@/redux/slices/codeSnippetSlice";
 
 interface ICodeSnippet {
   _id: string;
@@ -71,7 +68,7 @@ const Folder: React.FC<IFolderProps> = ({
       return;
     }
     try {
-      await axios.post(
+      const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/code-snippet/create`,
         {
           title: newCodeSnippetTitle,
@@ -83,6 +80,10 @@ const Folder: React.FC<IFolderProps> = ({
       setNewCodeSnippetTitle("");
       setNewCodeSnippetCode("");
       setShowCodeSnippetInput(false);
+      dispatch(
+        fetchCodeSnippet(localStorage.getItem("lastOpenFolderId") as string)
+      );
+      alert(data.message);
     } catch (error) {
       console.error("Error creating code snippet:", error);
     }
@@ -92,16 +93,18 @@ const Folder: React.FC<IFolderProps> = ({
     const confirm = window.confirm("you want to delete! Are you sure");
     if (confirm) {
       try {
-        await axios.delete(
+        const { data } = await axios.delete(
           `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/folder/delete/${folderId}`,
           {
             withCredentials: true,
           }
         );
-        setNewCodeSnippetTitle("");
-        setNewCodeSnippetCode("");
         setShowCodeSnippetInput(false);
-      } catch (error) {}
+        alert(data.message);
+        dispatch(fetchFolder());
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -143,17 +146,17 @@ const Folder: React.FC<IFolderProps> = ({
       </div>
 
       {showInput && (
-        <div className="mt-2 ml-4">
+        <div className="mt-2 ml-4 relative">
           <input
             type="text"
             value={newFolderName}
             onChange={(e) => setNewFolderName(e.target.value)}
             placeholder="Folder Name"
-            className="px-4 py-1 outline-none border border-green-500/20 rounded-sm text-sm"
+            className="px-4 py-1 outline-none border border-green-500/20 rounded-sm text-sm w-full"
           />
           <button
             onClick={addSubfolder}
-            className="text-sm font-bold ml-2 border py-1 px-4 rounded-sm"
+            className="text-sm font-bold ml-2 border py-1 px-4 rounded-sm absolute top-0 right-0 z-20 bg-white shadow-xl"
           >
             Add
           </button>
@@ -161,7 +164,14 @@ const Folder: React.FC<IFolderProps> = ({
       )}
 
       {showCodeSnippetInput && (
-        <div className="mt-4 flex flex-col gap-2">
+        <div className="mt-4 flex flex-col gap-2 fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-1/2 mx-auto bg-gray-200 p-2">
+          <div
+            className="flex justify-end font-bold px-2 cursor-pointer"
+            onClick={() => setShowCodeSnippetInput(!showCodeSnippetInput)}
+          >
+            X
+          </div>
+
           <div className="relative border">
             <input
               type="text"
@@ -179,6 +189,7 @@ const Folder: React.FC<IFolderProps> = ({
               <option value="private">Private</option>
             </select>
           </div>
+
           <textarea
             value={newCodeSnippetCode}
             rows={20}
@@ -187,6 +198,7 @@ const Folder: React.FC<IFolderProps> = ({
             placeholder="Code Snippet"
             className="px-4 py-2 outline-none border border-blue-500/20 rounded-sm text-sm mt-1"
           />
+
           <button
             onClick={addCodeSnippet}
             className="text-sm font-bold ml-2 border py-3 rounded-sm px-4 rounded-sm bg-orange-400 text-white"

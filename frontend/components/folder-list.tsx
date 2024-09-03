@@ -19,6 +19,7 @@ export interface IFolder {
 
 const FolderList: React.FC = () => {
   const [showInput, setShowInput] = useState(false);
+  const [isSideOpen, setIsSideOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const dispatch = useAppDispatch();
   const { folders } = useAppSelector((state) => state.folder);
@@ -26,7 +27,7 @@ const FolderList: React.FC = () => {
   const addFolder = async () => {
     if (newFolderName.trim() === "") return;
     try {
-      const { data } = await axios.post(
+      await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/folder/create`,
         {
           name: newFolderName,
@@ -67,17 +68,17 @@ const FolderList: React.FC = () => {
       </div>
 
       {showInput && (
-        <div className="mt-2 ml-4">
+        <div className="mt-2 ml-4 relative">
           <input
             type="text"
             value={newFolderName}
             onChange={(e) => setNewFolderName(e.target.value)}
             placeholder="Folder Name"
-            className="px-4 py-1 outline-none border border-green-500/20 rounded-sm text-sm"
+            className="px-4 py-1 outline-none border border-green-500/20 rounded-sm text-sm w-full"
           />
           <button
             onClick={addFolder}
-            className="text-sm font-bold ml-2 border py-1 px-4 rounded-sm"
+            className="text-sm font-bold ml-2 border py-1 px-4 rounded-sm absolute top-0 right-0 z-20 bg-white shadow-xl"
           >
             Add
           </button>

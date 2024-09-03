@@ -57,7 +57,6 @@ export default function Login() {
       return resData;
     },
     onSuccess: (data) => {
-      console.log(data);
       if (data.success) {
         alert(data.message);
         localStorage.setItem("auth_user_access_token", data.user.accessToken);

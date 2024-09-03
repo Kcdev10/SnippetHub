@@ -10,18 +10,18 @@ import TanStackReact from "@/components/wrapper/TanStackReact";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Snippet Hub",
-  description:
-    "Snippet Gallery where you can save you snippet code anytime and get anytime.",
-  icons: {
-    icon: {
-      rel: "icon",
-      url: "/favicon.ico",
-      sizes: "32x32",
-    },
-  },
-};
+// export const metadata: Metadata = {
+//   title: "Snippet Hub",
+//   description:
+//     "Snippet Gallery where you can save you snippet code anytime and get anytime.",
+//   icons: {
+//     icon: {
+//       rel: "icon",
+//       url: "/favicon.ico",
+//       sizes: "32x32",
+//     },
+//   },
+// };
 
 export default function RootLayout({
   children,

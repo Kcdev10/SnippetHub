@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-import mongoose from 'mongoose';
+import { Request, Response } from 'express';
 import User from '../models/user.model';
+import { CustomRequest } from '../middleware/authenticate';
 
 // export const getUserProfileController = asynchHandler(
 //   async (req: any, res: Response, next: NextFunction) => {
@@ -191,7 +191,7 @@ import User from '../models/user.model';
 //   res.json({ success: true, message: 'profile update successfully' });
 // });
 
-export const isAuthenticatedUser = (req: any, res: Response) => {
+export const isAuthenticatedUser = (req: CustomRequest, res: Response) => {
   res.status(201).json({
     success: true,
     user: { ...req.user },
@@ -199,7 +199,7 @@ export const isAuthenticatedUser = (req: any, res: Response) => {
   });
 };
 
-export const getAuthUser = async (req: any, res: Response) => {
+export const getAuthUser = async (req: CustomRequest, res: Response) => {
   try {
     const userDetails = await User.findById(req.user._id).select('-password');
     res.json({ status: true, user: userDetails });
@@ -208,11 +208,7 @@ export const getAuthUser = async (req: any, res: Response) => {
   }
 };
 
-export const registerController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const registerController = async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
     const isUserExist = await User.findOne({ email });
@@ -237,11 +233,7 @@ export const registerController = async (
   }
 };
 
-export const loginController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const loginController = async (req: Request, res: Response) => {
   try {
     const { email, username, password } = req.body;
     const isUser = await User.findOne({
@@ -282,7 +274,9 @@ export const loginController = async (
           uuid: isUser._id,
         },
       });
-  } catch (error) {}
+  } catch (error) {
+    if (error && error instanceof Error) res.json({ success: false, error });
+  }
 };
 
 // export const logout = asynchHandler(async (req: Request, res: Response) => {

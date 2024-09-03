@@ -1,6 +1,9 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
-import { fetchPublicCodeSnippet } from "@/redux/slices/codeSnippetSlice";
+import {
+  fetchCodeSnippet,
+  fetchPublicCodeSnippet,
+} from "@/redux/slices/codeSnippetSlice";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { fetchUserDetails } from "@/redux/slices/userSlice";
@@ -36,7 +39,7 @@ export default function Header() {
     };
   }, [dispatch]);
   return (
-    <header className="bg-gray-900 text-white p-4 fixed top-0 w-full z-50">
+    <header className="bg-gray-900 py-3 text-white fixed top-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
         <Link href={"/"} className="text-2xl font-bold flex items-center">
           <img
@@ -45,19 +48,23 @@ export default function Header() {
             className="object-cover w-12"
           />
         </Link>
-        <nav className="flex items-center">
-          <Link href="/" className=" hover:text-gray-400 px-4">
+
+        <nav className="flex md:gap-8 gap-2 items-center">
+          <Link href="/" className=" hover:text-gray-400 md:text-lg text-sm">
             Home
           </Link>
 
-          <Link href="/explore" className=" hover:text-gray-400 px-4">
+          <Link
+            href="/explore"
+            className=" hover:text-gray-400 md:text-lg text-sm"
+          >
             Explore
           </Link>
 
           {authenticate && (
             <Link
               href={"/folder"}
-              className="hover:text-gray-400 px-4 flex items-center gap-2"
+              className="hover:text-gray-400 flex items-center gap-2 md:text-lg text-sm"
             >
               Snippet <VscCode size={26} />
             </Link>
@@ -65,7 +72,7 @@ export default function Header() {
 
           {authenticate && (
             <div
-              className="w-10 h-10 bg-white rounded-full cursor-pointer relative ml-4"
+              className="w-10 h-10 bg-white rounded-full cursor-pointer relative md:ml-4"
               onClick={() => setDialogBos(!dialogBox)}
             >
               <span className="flex items-center justify-center text-gray-600 text-3xl font-bold">
@@ -75,7 +82,7 @@ export default function Header() {
 
               <div
                 ref={refDialabox}
-                className="absolute left-1/2 top-[138%] rounded-sm w-auto bg-gray-200 shadow-lg transition-all duration-200 origin-top z-30"
+                className="absolute top-[138%] rounded-sm w-auto bg-gray-200 shadow-lg transition-all duration-200 origin-top z-30"
                 style={{
                   transform: dialogBox
                     ? "translateX(-70%) scaleY(1)"
@@ -92,6 +99,7 @@ export default function Header() {
                     onClick={() => {
                       Cookies.remove("auth_user_access_token", { path: "/" });
                       localStorage.removeItem("lastOpenFolderId");
+                      localStorage.removeItem("auth_user_access_token");
                       dispatch(fetchUserDetails());
                     }}
                   >
@@ -103,13 +111,19 @@ export default function Header() {
           )}
 
           {!authenticate && (
-            <Link href="/auth/login" className="mx-4 hover:text-gray-400">
+            <Link
+              href="/auth/login"
+              className="hover:text-gray-400 md:text-lg text-sm"
+            >
               Login
             </Link>
           )}
 
           {!authenticate && (
-            <Link href="/auth/register" className="mx-4 hover:text-gray-400">
+            <Link
+              href="/auth/register"
+              className="hover:text-gray-400 md:text-lg text-sm"
+            >
               Register
             </Link>
           )}

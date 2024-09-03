@@ -17,9 +17,14 @@ export const createSnippet = async (req: Request, res: Response) => {
     });
 
     const createdSnippet = await snippet.save();
-    res.status(201).json({ success: true, codeSnippet: createdSnippet });
+    res.status(201).json({
+      success: true,
+      codeSnippet: createdSnippet,
+      message: 'code snippet created!',
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    if (error && error instanceof Error)
+      res.status(500).json({ message: error.message });
   }
 };
 
@@ -75,7 +80,8 @@ export const updateSnippet = async (req: Request, res: Response) => {
 
     res.status(201).json({ success: true, message: 'update successfull' });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    if (error && error instanceof Error)
+      res.status(500).json({ message: 'Server Error' });
   }
 };
 

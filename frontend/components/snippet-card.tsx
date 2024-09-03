@@ -9,6 +9,7 @@ import { MdOutlineDelete } from "react-icons/md";
 import axios from "axios";
 import { useAppDispatch } from "@/hooks/reduxHooks";
 import { fetchCodeSnippet } from "@/redux/slices/codeSnippetSlice";
+import Link from "next/link";
 
 export interface ISnippetType {
   _id: string;
@@ -64,7 +65,7 @@ export default function SnippetCard({
       return;
     }
     try {
-      await axios.post(
+      const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/code-snippet/update/${snippetId}`,
         {
           title: newCodeSnippetTitle,
@@ -77,6 +78,7 @@ export default function SnippetCard({
         fetchCodeSnippet(localStorage.getItem("lastOpenFolderId") as string)
       );
       setShowCodeSnippetInput(false);
+      console.log(data);
     } catch (error) {
       console.error("Error creating code snippet:", error);
     }
@@ -90,50 +92,57 @@ export default function SnippetCard({
       key={_id}
       className="mb-4 px-6 py-3 border rounded shadow h-96 overflow-auto"
     >
-      <div className="flex justify-between items-center">
-        <h2 className="text-[15px] font-bold ">{title}</h2>
+      <div className="flex gap-2 items-center justify-end">
+        <button
+          onClick={() => {
+            handleCopy(code);
+            setIsCopiedIndex(index);
+          }}
+          className="px-4 py-2 bg-gray-200 text-white rounded"
+          title="Copy code"
+        >
+          {index === isCopiedIndex ? (
+            <BsFillPatchCheckFill size={20} className="text-black/80" />
+          ) : (
+            <FaRegCopy size={20} className="text-black/80" />
+          )}
+        </button>
 
-        <div className="flex gap-2 items-center">
-          <button
+        {showEditDelete && (
+          <div
+            className="px-4 py-2 bg-gray-200 rounded cursor-pointer"
             onClick={() => {
-              handleCopy(code);
-              setIsCopiedIndex(index);
+              setShowCodeSnippetInput(!showCodeSnippetInput);
+              setNewCodeSnippetCode(code);
+              setNewCodeSnippetTitle(title);
             }}
-            className="px-4 py-2 bg-gray-200 text-white rounded"
-            title="Copy code"
           >
-            {index === isCopiedIndex ? (
-              <BsFillPatchCheckFill size={20} className="text-black/80" />
-            ) : (
-              <FaRegCopy size={20} className="text-black/80" />
-            )}
-          </button>
+            <CiEdit size={20} />
+          </div>
+        )}
 
-          {showEditDelete && (
-            <div
-              className="px-4 py-2 bg-gray-200 rounded cursor-pointer"
-              onClick={() => setShowCodeSnippetInput(!showCodeSnippetInput)}
-            >
-              <CiEdit size={20} />
-            </div>
-          )}
-
-          {showEditDelete && (
-            <div
-              className="px-4 py-2 bg-gray-200 rounded cursor-pointer"
-              onClick={() => handleSnippetDelete(_id)}
-            >
-              <MdOutlineDelete size={20} />
-            </div>
-          )}
-        </div>
+        {showEditDelete && (
+          <div
+            className="px-4 py-2 bg-gray-200 rounded cursor-pointer"
+            onClick={() => handleSnippetDelete(_id)}
+          >
+            <MdOutlineDelete size={20} />
+          </div>
+        )}
       </div>
-      <pre className={`language-javascript`}>
-        <code>{code}</code>
-      </pre>
+
+      <div className="flex md:flex-row flex-col gap-4 justify-between items-center mt-5">
+        <h2 className="text-[15px] font-bold ">{title}</h2>
+      </div>
+
+      <Link href={`/code-snippet?q=${_id}`}>
+        <pre className={`language-javascript w-full`}>
+          <code>{code}</code>
+        </pre>
+      </Link>
 
       {showCodeSnippetInput && (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
+        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center mt-10">
           <div className="mt-4 flex flex-col gap-2 w-1/2 mx-auto p-5 border bg-gray-200">
             <span
               className="flex justify-end font-bold cursor-pointer"
