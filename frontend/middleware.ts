@@ -20,6 +20,7 @@ export async function middleware(request: NextRequest) {
     }
   );
   const userAuth = await data.json();
+
   if (path === "/auth/login" || path === "/auth/register") {
     if (userAuth.success) {
       return NextResponse.redirect(new URL("/", request.url));

@@ -191,17 +191,19 @@ import { CustomRequest } from '../middleware/authenticate';
 //   res.json({ success: true, message: 'profile update successfully' });
 // });
 
-export const isAuthenticatedUser = (req: CustomRequest, res: Response) => {
+export const isAuthenticatedUser = (req: Request, res: Response) => {
   res.status(201).json({
     success: true,
-    user: { ...req.user },
+    user: { ...(req as CustomRequest).user },
     message: 'user is authenticate',
   });
 };
 
-export const getAuthUser = async (req: CustomRequest, res: Response) => {
+export const getAuthUser = async (req: Request, res: Response) => {
   try {
-    const userDetails = await User.findById(req.user._id).select('-password');
+    const userDetails = await User.findById(
+      (req as CustomRequest).user._id
+    ).select('-password');
     res.json({ status: true, user: userDetails });
   } catch (error) {
     res.status(401).json({ status: false, message: error });

@@ -6,10 +6,14 @@ import { CustomRequest } from '../middleware/authenticate';
 
 // Create a new snippet
 
-export const createFolder = async (req: CustomRequest, res: Response) => {
+export const createFolder = async (req: Request, res: Response) => {
   try {
     const { name, parentId } = req.body;
-    const folder = new Folder({ name, parentId, owner: req.user._id });
+    const folder = new Folder({
+      name,
+      parentId,
+      owner: (req as CustomRequest).user._id,
+    });
 
     if (parentId) {
       await Folder.findByIdAndUpdate(parentId, {
@@ -29,7 +33,7 @@ export const createFolder = async (req: CustomRequest, res: Response) => {
 
 const populateSubfolders = async (
   folderId: mongoose.Types.ObjectId | null,
-  ownerId: mongoose.Types.ObjectId
+  ownerId: mongoose.Types.ObjectId | string
 ): Promise<IFolder[]> => {
   const folders = await Folder.find({
     $and: [{ parentId: folderId }, { owner: ownerId }],
@@ -54,9 +58,12 @@ const populateSubfolders = async (
   return folders as IFolder[];
 };
 
-export const getFolder = async (req: CustomRequest, res: Response) => {
+export const getFolder = async (req: Request, res: Response) => {
   try {
-    const folders = await populateSubfolders(null, req.user._id); // Fetch top-level folders
+    const folders = await populateSubfolders(
+      null,
+      (req as CustomRequest).user._id
+    ); // Fetch top-level folders
     res.json({ success: true, message: 'get scuccessfull', folders });
   } catch (error) {
     if (error instanceof Error)
@@ -85,8 +92,6 @@ async function deleteFolderAndDescendants(folderId: string) {
     };
 
     await findDescendants(folderId);
-
-    console.log('Folder and its descendants deleted successfully.');
   } catch (error) {
     console.error('Error deleting folder:', error);
   }

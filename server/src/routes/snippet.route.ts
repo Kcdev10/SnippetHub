@@ -7,7 +7,6 @@ import {
   //   getSnippetById,
   //   deleteSnippet,
 } from '../controllers/snippet.controller';
-import { isAuthenticateOrNot } from '../middleware/authenticate';
 
 const router = Router();
 

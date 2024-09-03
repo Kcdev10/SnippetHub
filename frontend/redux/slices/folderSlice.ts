@@ -51,7 +51,6 @@ export const fetchFolder = (): any => {
         }
       );
       const folders = await data.json();
-      console.log(folders);
       dispatch(setFolders(folders.folders));
     } catch (error) {
       console.log(`error: ${error}`);
