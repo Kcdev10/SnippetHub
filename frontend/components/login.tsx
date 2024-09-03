@@ -58,6 +58,7 @@ export default function Login() {
     },
     onSuccess: (data) => {
       if (data.success) {
+        navigate.push("/");
         alert(data.message);
         localStorage.setItem("auth_user_access_token", data.user.accessToken);
         Cookies.set("auth_user_access_token", data.user.accessToken, {
@@ -65,7 +66,6 @@ export default function Login() {
           path: "/",
         });
         dispatch(fetchUserDetails());
-        navigate.push("/");
       } else alert(data.message);
       setDisabled(false);
     },
