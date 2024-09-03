@@ -51,7 +51,7 @@ const Folder: React.FC<IFolderProps> = ({
         },
         {
           headers: {
-            "Content-Type": "applicaion/json",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("auth_user_access_token")}`,
           },
           // withCredentials: true,
