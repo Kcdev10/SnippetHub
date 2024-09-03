@@ -45,15 +45,20 @@ const Folder: React.FC<IFolderProps> = ({
     try {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/folder/create`,
-
         {
           name: newFolderName,
           parentId: _id,
         },
         {
+          // headers: {
+          //   // "Content-Type": "applicaion/json",
+          //   // Authorization: `Bearer ${localStorage.getItem("auth_user_access_token")}`,
+          // },
           withCredentials: true,
         }
       );
+
+      console.log(data);
       setNewFolderName("");
       setShowInput(false);
       dispatch(fetchFolder());

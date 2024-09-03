@@ -20,6 +20,9 @@ export const isAuthenticateOrNot = async (
       req?.cookies?.auth_user_access_token ||
       (req.headers.authorization?.split('Bearer')[1].trim() as string);
 
+    console.log(req.headers.authorization);
+    // console.log(req.cookies);
+
     if (!accessToken) {
       return res.status(401).json({
         success: false,

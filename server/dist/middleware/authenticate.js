@@ -9,6 +9,8 @@ const isAuthenticateOrNot = async (req, res, next) => {
     try {
         const accessToken = req?.cookies?.auth_user_access_token ||
             req.headers.authorization?.split('Bearer')[1].trim();
+        console.log(req.headers.authorization);
+        // console.log(req.cookies);
         if (!accessToken) {
             return res.status(401).json({
                 success: false,

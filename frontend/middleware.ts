@@ -20,6 +20,7 @@ export async function middleware(request: NextRequest) {
     }
   );
   const userAuth = await data.json();
+  console.log(userAuth);
 
   if (path === "/auth/login" || path === "/auth/register") {
     if (userAuth.success) {

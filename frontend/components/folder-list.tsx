@@ -34,8 +34,14 @@ const FolderList: React.FC = () => {
           parentId: null, // Use the parentId if creating a subfolder
         },
         {
-          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_user_access_token")}`,
+          },
         }
+        // {
+        //   withCredentials: true,
+        // }
       );
       setNewFolderName("");
       setShowInput(false);
