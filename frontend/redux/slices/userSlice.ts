@@ -49,10 +49,10 @@ export const fetchUserDetails = (): any => {
         `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/auth/user`,
         {
           credentials: "include",
-          // headers: {
-          //   "Content-Type": "application/json",
-          //   Authorization: `Bearer ${localStorage.getItem("auth_user_access_token")}`,
-          // },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_user_access_token")}`,
+          },
         }
       );
       const user = await data.json();
