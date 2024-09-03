@@ -50,10 +50,10 @@ const Folder: React.FC<IFolderProps> = ({
           parentId: _id,
         },
         {
-          // headers: {
-          //   // "Content-Type": "applicaion/json",
-          //   // Authorization: `Bearer ${localStorage.getItem("auth_user_access_token")}`,
-          // },
+          headers: {
+            "Content-Type": "applicaion/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_user_access_token")}`,
+          },
           withCredentials: true,
         }
       );
@@ -101,6 +101,10 @@ const Folder: React.FC<IFolderProps> = ({
         const { data } = await axios.delete(
           `${process.env.NEXT_PUBLIC_API_URL_HOST}/api/v1/folder/delete/${folderId}`,
           {
+            headers: {
+              "Content-Type": "applicaion/json",
+              Authorization: `Bearer ${localStorage.getItem("auth_user_access_token")}`,
+            },
             withCredentials: true,
           }
         );
